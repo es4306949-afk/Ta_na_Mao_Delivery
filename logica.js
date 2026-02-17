@@ -40,20 +40,19 @@ function renderizarCalendario() {
 
 function enviarWhatsApp() {
     const nome = document.getElementById('nome-cliente').value;
+    const meuZap = "5598985170240"; // Seu número configurado
     
-    // SEU NÚMERO CONFIGURADO: (98) 98517-0240
-    const meuZap = "5598985170240"; 
-    
-    if(!nome) return alert("Por favor, digite seu nome completo para continuar!");
+    if(!nome) return alert("Por favor, digite seu nome!");
 
+    // Converte a data do formato AAAA-MM-DD para DD/MM/AAAA
     const dataF = dataSelecionada.split('-').reverse().join('/');
-    
-    // Mensagem personalizada para a ÁREA VIP
+
+    // Montagem da mensagem com a DATA ESCOLHIDA
     const mensagem = `*SOLICITAÇÃO ÁREA VIP* 🔱%0A%0A` +
                      `*Cliente:* ${nome}%0A` +
-                     `*Data:* ${dataF}%0A` +
+                     `*Data Solicitada:* ${dataF}%0A` + // <--- A DATA APARECE AQUI
                      `*Horário:* 09:00 às 21:00h%0A%0A` +
-                     `Olá! Vi no site que esta data está livre. Podemos prosseguir com o agendamento?`;
+                     `Olá! Vi no site que a data *${dataF}* está disponível e gostaria de reservar!`;
     
     window.open(`https://wa.me/${meuZap}?text=${mensagem}`, '_blank');
 }
@@ -71,3 +70,4 @@ function mostrarCalendario() {
     }, 100);
 
 }
+
