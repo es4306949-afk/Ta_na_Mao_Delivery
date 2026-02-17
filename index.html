@@ -3,199 +3,319 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ÁREA VIP - Reservas</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
-
+    <title>TÁ NA MÃO DELIVERY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --dark: #000000; --light: #ffffff; }
-
-        body, html { 
-            margin: 0; padding: 0; 
-            font-family: 'Montserrat', sans-serif; 
-            background-color: var(--dark); 
-            color: var(--light);
-            scroll-behavior: smooth;
+        :root { 
+            --primary: #ff9f43; 
+            --green: #25d366; 
+            --dark: #2d3436; 
+            --admin: #54a0ff; 
+            --bg: #f8f9fa;
         }
 
-        /* --- TELA INICIAL --- */
-        #hero {
-            height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), 
-                        url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            padding-bottom: 110px; 
+            color: var(--dark);
         }
 
-        .logo-img { 
-            width: 180px; height: 180px;
-            margin-bottom: 20px; 
-            border: 4px solid var(--gold); 
-            border-radius: 50%;
-            object-fit: cover;
-            background: #000;
+        /* CABEÇALHO */
+        header { 
+            background: var(--primary); 
+            color: white; 
+            text-align: center; 
+            padding: 30px 20px; 
+            border-radius: 0 0 25px 25px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        #hero h1 { font-size: 3rem; color: var(--gold); margin: 0; letter-spacing: 2px; }
-        #hero p { font-size: 1.2rem; margin-bottom: 30px; opacity: 0.8; }
-
-        .btn-gold {
-            padding: 18px 45px;
-            background: var(--gold);
-            color: black;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-        }
-        .btn-gold:hover { background: #f1c40f; transform: scale(1.05); }
-
-        /* --- SEÇÃO DO CALENDÁRIO --- */
-        #sessao-calendario { 
-            display: none; /* Começa escondido */
-            padding: 60px 15px; 
-            background-color: #111; 
-            min-height: 100vh; 
-        }
-
-        .container { 
-            max-width: 850px; 
-            margin: auto; 
-            background: white; 
-            color: #494343; 
-            padding: 30px; 
-            border-radius: 15px; 
-        }
-
-        /* Cores das Células do Calendário */
-        .fc-daygrid-day { background-color: #c6e4c7 !important; } /* Verde para Livre */
-        .fc-day-past { background-color: #3a3737 !important; opacity: 0.5; cursor: not-allowed; }
+        header h1 { margin: 0; font-size: 1.6rem; letter-spacing: 1px; }
         
-        /* Cores dos Eventos Marcados */
-        .event-confirmado { background-color: #f43f5e !important; border: none !important; color: white !important; }
-        .event-agendado { background-color: #f1c40f !important; border: none !important; color: black !important; }
-
-        .info-horario { 
-            background: #fff8e1; border-left: 5px solid var(--gold); 
-            padding: 15px; margin-bottom: 20px; border-radius: 4px;
+        .btn-gestor { 
+            background: rgba(255,255,255,0.2); 
+            border: 1px solid rgba(255,255,255,0.4); 
+            color: white; 
+            padding: 6px 15px; 
+            border-radius: 20px; 
+            font-size: 10px; 
+            cursor: pointer; 
+            margin-top: 15px;
+            text-transform: uppercase;
+            font-weight: 600;
         }
 
-        .container-legenda { 
-            display: flex; justify-content: center; gap: 15px; 
-            margin: 20px 0; flex-wrap: wrap; 
-        }
-        .legenda-item { display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: bold; }
-        .ponto { width: 15px; height: 15px; border-radius: 3px; }
+        .container { max-width: 500px; margin: auto; padding: 15px; }
 
-        #form-reserva { 
-            display: none; margin-top: 30px; 
-            padding-top: 20px; border-top: 2px solid #eee; 
+        /* PAINEL ADMINISTRATIVO */
+        #painel-adm { 
+            display: none; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 20px; 
+            border: 2px dashed var(--admin); 
+            margin-bottom: 25px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
-        input { 
-            width: 100%; padding: 15px; margin: 10px 0; 
-            border: 2px solid #ddd; border-radius: 8px; font-size: 16px;
+        #painel-adm h3 { margin-top: 0; color: var(--admin); font-size: 1rem; }
+
+        .input-adm { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 10px; 
             box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .btn-salvar { 
+            background: var(--admin); 
+            color: white; 
+            border: none; 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* CARD DO PRODUTO */
+        .item { 
+            background: white; 
+            border-radius: 18px; 
+            padding: 12px; 
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 15px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            transition: transform 0.2s;
+        }
+
+        .item:active { transform: scale(0.98); }
+
+        .item-img { 
+            width: 90px; 
+            height: 90px; 
+            border-radius: 15px; 
+            object-fit: cover; 
+            margin-right: 15px; 
+            background: #eee;
+        }
+
+        .item-info { flex: 1; }
+        .item-name { font-weight: 700; margin: 0; font-size: 1rem; color: #333; }
+        .item-desc { font-size: 0.75rem; color: #7f8c8d; margin: 5px 0; line-height: 1.3; }
+        .item-price { color: var(--green); font-weight: 800; font-size: 1rem; display: block; margin-top: 5px; }
+
+        .btn-add { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 10px 15px; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .btn-del { 
+            color: #ff6b6b; 
+            border: none; 
+            background: none; 
+            font-size: 11px; 
+            cursor: pointer; 
+            display: none; 
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        /* RODAPÉ FIXO */
+        .footer-cart { 
+            position: fixed; 
+            bottom: 0; 
+            width: 100%; 
+            background: white; 
+            padding: 20px; 
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.1); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-sizing: border-box; 
+            z-index: 1000;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .total-container { line-height: 1.2; }
+        .total-label { font-size: 0.75rem; color: #95a5a6; font-weight: 600; }
+        .total-val { font-size: 1.5rem; font-weight: 800; color: var(--dark); }
+
+        .btn-finalizar { 
+            background: var(--green); 
+            color: white; 
+            border: none; 
+            padding: 15px 25px; 
+            border-radius: 15px; 
+            font-weight: bold; 
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+        }
+
+        .badge-count {
+            background: #ff4757;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+            vertical-align: middle;
         }
     </style>
 </head>
 <body>
 
-    <section id="hero">
-        <img src="img.html/Logo area vip.jpg" alt="ÁREA VIP" class="logo-img">
-        <h1>ÁREA VIP</h1>
-        <p>FESTAS E EVENTOS</p>
-        <button class="btn-gold" onclick="abrirAgendamento()">Ver Disponibilidade</button>
-    </section>
+<header>
+    <h1>TÁ NA MÃO DELIVERY 🤝</h1>
+    <p style="margin: 5px 0 0; font-size: 0.8rem; opacity: 0.8;">O melhor sabor, direto na sua mão!</p>
+    <button class="btn-gestor" onclick="abrirAdmin()">⚙️ Modo Gestor</button>
+</header>
 
-    <section id="sessao-calendario">
-        <div class="container">
-            <h2 style="text-align: center;">Calendário de Disponibilidade</h2>
-            
-            <div class="info-horario">
-                ⏰ <b>Horário Padrão:</b> Entrada 09:00h | Saída 21:00h
+<div class="container">
+    
+    <div id="painel-adm">
+        <h3>🚀 Gerenciar Cardápio</h3>
+        <input type="text" id="adm-nome" placeholder="Nome do Lanche" class="input-adm">
+        <input type="text" id="adm-desc" placeholder="Ingredientes (ex: Pão, carne, queijo...)" class="input-adm">
+        <input type="number" id="adm-preco" placeholder="Preço (Ex: 29.90)" class="input-adm">
+        <input type="text" id="adm-foto" placeholder="Link da Foto (URL)" class="input-adm">
+        <button class="btn-salvar" onclick="cadastrarItem()">CADASTRAR PRODUTO</button>
+    </div>
+
+    <div id="lista-cardapio">
+        <div class="item">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300" class="item-img">
+            <div class="item-info">
+                <p class="item-name">X-Burger Clássico</p>
+                <p class="item-desc">Pão brioche, blend de 150g, queijo cheddar e maionese artesanal.</p>
+                <span class="item-price">R$ 25,00</span>
+                <button class="btn-del" onclick="removerItem(this)">❌ Remover Item</button>
             </div>
-
-            <div id="calendar"></div>
-
-            <div class="container-legenda">
-                <div class="legenda-item"><div class="ponto" style="background: #00ff15de; border: 1px solid #00ff15de;"></div> Livre</div>
-                <div class="legenda-item"><div class="ponto" style="background: #f1c40f;"></div> Agendado</div>
-                <div class="legenda-item"><div class="ponto" style="background: #f43f5e;"></div> Confirmado</div>
-            </div>
-
-            <div id="form-reserva">
-                <h3 id="data-texto" style="color: var(--gold); text-align: center;"></h3>
-                <input type="text" id="nome-cliente" placeholder="Seu Nome Completo">
-                <button class="btn-gold" style="width: 100%;" onclick="enviarWhatsApp()">Solicitar Reserva</button>
-            </div>
+            <button class="btn-add" onclick="adicionarAoCarrinho('X-Burger Clássico', 25.00)">ADD</button>
         </div>
-    </section>
+    </div>
+</div>
 
-    <script>
-        let dataSelecionada = "";
-        let calendar; 
+<div class="footer-cart">
+    <div class="total-container">
+        <span class="total-label">Total do pedido</span><br>
+        <span class="total-val">R$ <span id="display-total">0,00</span></span>
+    </div>
+    <button class="btn-finalizar" onclick="finalizarPedido()">FECHAR PEDIDO</button>
+</div>
 
-        // --- BANCO DE DADOS DE DATAS ---
-        const meusEventos = [
-            { title: 'AGENDADO', start: '2026-02-25', className: 'event-agendado' },
-            { title: 'CONFIRMADO', start: '2026-02-28', className: 'event-confirmado' }
-        ];
+<script>
+    let vTotal = 0;
+    let pedidoItens = [];
+    let isGestor = false;
 
-        // Função que o botão chama
-        function abrirAgendamento() {
-            document.getElementById('hero').style.display = 'none';
-            document.getElementById('sessao-calendario').style.display = 'block';
-            
-            // Inicializa o calendário com um pequeno atraso para não dar erro de renderização
-            setTimeout(() => {
-                const calendarEl = document.getElementById('calendar');
-                calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: 'dayGridMonth',
-                    locale: 'pt-br',
-                    events: meusEventos,
-                    selectable: true,
-                    dateClick: function(info) {
-                        const hoje = new Date().toISOString().split('T')[0];
-                        if (info.dateStr < hoje) return;
+    // LOGIN DO ADMINISTRADOR
+    function abrirAdmin() {
+        const senha = prompt("Digite a senha do gestor:");
+        if (senha === "1234") {
+            isGestor = !isGestor;
+            document.getElementById('painel-adm').style.display = isGestor ? 'block' : 'none';
+            document.querySelectorAll('.btn-del').forEach(b => b.style.display = isGestor ? 'block' : 'none');
+            alert(isGestor ? "MODO GESTOR ATIVADO" : "MODO CLIENTE ATIVADO");
+        } else {
+            alert("Senha incorreta!");
+        }
+    }
 
-                        const ocupado = meusEventos.some(e => e.start === info.dateStr);
-                        if (ocupado) {
-                            alert("Data indisponível.");
-                        } else {
-                            dataSelecionada = info.dateStr;
-                            document.getElementById('form-reserva').style.display = 'block';
-                            document.getElementById('data-texto').innerText = "Data: " + info.dateStr.split('-').reverse().join('/');
-                            window.scrollTo(0, document.body.scrollHeight);
-                        }
-                    }
-                });
-                calendar.render();
-            }, 100);
+    // ADICIONAR ITEM AO CARRINHO (CLIENTE)
+    function adicionarAoCarrinho(nome, preco) {
+        if (isGestor) {
+            alert("Saia do modo gestor para simular um pedido.");
+            return;
+        }
+        vTotal += preco;
+        pedidoItens.push(nome);
+        document.getElementById('display-total').innerText = vTotal.toFixed(2).replace('.', ',');
+    }
+
+    // CADASTRAR NOVO ITEM (ADM)
+    function cadastrarItem() {
+        const nome = document.getElementById('adm-nome').value;
+        const desc = document.getElementById('adm-desc').value;
+        const preco = document.getElementById('adm-preco').value;
+        let foto = document.getElementById('adm-foto').value;
+
+        if (!nome || !preco) {
+            alert("Por favor, preencha Nome e Preço.");
+            return;
         }
 
-        function enviarWhatsApp() {
-            const nome = document.getElementById('nome-cliente').value;
-            const meuZap = "5598985170240"; // <-- COLOQUE SEU NUMERO AQUI
-            
-            if(!nome) return alert("Digite seu nome!");
+        if (!foto) foto = "https://cdn-icons-png.flaticon.com/512/3075/3075977.png";
 
-            const dataF = dataSelecionada.split('-').reverse().join('/');
-            const mensagem = `*SOLICITAÇÃO ÁREA VIP*%0A%0A*Cliente:* ${nome}%0A*Data:* ${dataF}%0A*Horário:* 09h às 21h`;
-            
-            window.open(`https://wa.me/${98985170240}?text= Olá, eu gostaria de confirmar meu agendamento!`);
+        const precoFormatado = parseFloat(preco).toFixed(2);
+
+        const novoItemHTML = `
+            <div class="item">
+                <img src="${foto}" class="item-img">
+                <div class="item-info">
+                    <p class="item-name">${nome}</p>
+                    <p class="item-desc">${desc}</p>
+                    <span class="item-price">R$ ${precoFormatado.replace('.', ',')}</span>
+                    <button class="btn-del" style="display:block" onclick="removerItem(this)">❌ Remover Item</button>
+                </div>
+                <button class="btn-add" onclick="adicionarAoCarrinho('${nome}', ${parseFloat(preco)})">ADD</button>
+            </div>
+        `;
+
+        document.getElementById('lista-cardapio').insertAdjacentHTML('beforeend', novoItemHTML);
+        
+        // Limpa formulário
+        document.getElementById('adm-nome').value = "";
+        document.getElementById('adm-desc').value = "";
+        document.getElementById('adm-preco').value = "";
+        document.getElementById('adm-foto').value = "";
+    }
+
+    // REMOVER ITEM (ADM)
+    function removerItem(botao) {
+        if (confirm("Deseja realmente excluir este produto?")) {
+            botao.closest('.item').remove();
         }
-    </script>
+    }
+
+    // FINALIZAR E ENVIAR WHATSAPP
+    function finalizarPedido() {
+        if (pedidoItens.length === 0) {
+            alert("Seu carrinho está vazio!");
+            return;
+        }
+
+        const numeroWhats = "5598985170240"; // Seu número (98) 98517-0240
+        
+        // Contabiliza as quantidades (ex: 2x Lanche)
+        const contagem = {};
+        pedidoItens.forEach(i => contagem[i] = (contagem[i] || 0) + 1);
+
+        let mensagem = "*NOVO PEDIDO - TÁ NA MÃO DELIVERY* 🤝%0A%0A";
+        
+        for (let lanche in contagem) {
+            mensagem += `▪️ *${contagem[lanche]}x* ${lanche}%0A`;
+        }
+
+        mensagem += `%0A*TOTAL DO PEDIDO: R$ ${vTotal.toFixed(2).replace('.', ',')}*%0A%0A`;
+        mensagem += "Gostaria de confirmar meu pedido!";
+
+        window.open(`https://wa.me/${numeroWhats}?text=${mensagem}`);
+    }
+</script>
+
 </body>
-
 </html>
-
