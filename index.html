@@ -281,16 +281,17 @@
         msg += `%0A---------------------------%0A`;
         msg += `*Subtotal:* R$ ${subtotalProdutos.toFixed(2).replace('.', ',')}%0A`;
         msg += `*Taxa de Entrega:* R$ ${taxa.toFixed(2).replace('.', ',')}%0A`;
-        msg += `*TOTAL FINAL: R$ ${(subtotalProdutos + taxa).toFixed(2).replace('.', ',')}*`;
+        msg += `*VALOR A PAGAR: R$ ${(subtotalProdutos + taxa).toFixed(2).replace('.', ',')}*`;
 
         window.open(`https://wa.me/${WHATSAPP_NUM}?text=${msg}`);
     }
 
     function abrirAdmin() {
-        if(prompt("Senha:") === "Vibe26") alert("ADM liberado.");
+        if(prompt("Senha:") === "1234") alert("ADM liberado.");
     }
 
     window.onload = render;
 </script>
 </body>
 </html>
+
