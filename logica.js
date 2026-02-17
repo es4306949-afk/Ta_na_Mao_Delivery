@@ -40,7 +40,7 @@ function renderizarCalendario() {
 
 function enviarWhats() {
     const nome = document.getElementById('nome-cliente').value;
-    const numero = "5511999999999"; // SEU NÚMERO AQUI
+    const numero = "5598985170240"; // 98985170240
     
     if(!nome) return alert("Por favor, digite seu nome.");
 
@@ -65,4 +65,5 @@ function mostrarCalendario() {
     setTimeout(() => {
         renderizarCalendario();
     }, 100);
+
 }
