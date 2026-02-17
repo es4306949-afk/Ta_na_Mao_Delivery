@@ -1,6 +1,6 @@
 function enviarWhatsApp() {
     const nome = document.getElementById('nome-cliente').value;
-    const meuZap = "5598985170240";
+    const meuZap = "5598984531899";
     
     if (!dataSelecionadaGlobal) return alert("Selecione uma data!");
     if (!nome) return alert("Digite seu nome!");
@@ -29,3 +29,4 @@ function enviarWhatsApp() {
     
     window.open(`https://wa.me/${meuZap}?text=${mensagem}`, '_blank');
 }
+
