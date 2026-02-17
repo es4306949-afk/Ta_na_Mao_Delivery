@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TÁ NA MÃO | Cardápio Completo</title>
+    <title>TÁ NA MÃO | Cardápio Profissional</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -37,7 +37,6 @@
         .btn-qty { background: var(--white); border: none; width: 35px; height: 35px; border-radius: 10px; cursor: pointer; color: var(--primary); font-weight: bold; font-size: 22px; }
         .qty { font-weight: 800; }
 
-        /* CARRINHO MODAL */
         #carrinho-modal { position: fixed; bottom: -100%; left: 0; width: 100%; height: 92%; background: #fff; z-index: 10000; border-radius: 30px 30px 0 0; transition: 0.4s; display: flex; flex-direction: column; }
         #carrinho-modal.active { bottom: 0; }
         .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); display:none; z-index: 9999; backdrop-filter: blur(5px); }
@@ -67,7 +66,7 @@
 
 <div id="carrinho-modal">
     <div style="padding: 25px; border-bottom: 1px solid #eee; display:flex; justify-content: space-between;">
-        <h2 style="font-weight: 800;">🛒 Seu Pedido</h2>
+        <h2 style="font-weight: 800;">🛒 Detalhes do Pedido</h2>
         <button onclick="toggleCarrinho()" style="border:none; background:#f1f2f6; width:40px; height:40px; border-radius:50%;">✕</button>
     </div>
     
@@ -75,38 +74,50 @@
         <div id="cart-itens-lista"></div>
         <div class="form-checkout">
             <div class="input-group">
-                <label>COMO DESEJA RECEBER?</label>
+                <label style="color:var(--primary)">Obrigatório: COMO DESEJA RECEBER?</label>
                 <select id="c-metodo" onchange="atualizarTotal()">
-                    <option value="Delivery">Delivery (+ R$ 2,00)</option>
+                    <option value="" selected disabled>Escolha uma opção...</option>
+                    <option value="Delivery">Delivery (Taxa R$ 2,00)</option>
                     <option value="Retirada">Retirada no Local (Grátis)</option>
                 </select>
             </div>
-            <div class="input-group"><label>NOME</label><input type="text" id="c-nome" placeholder="Seu nome"></div>
             
-            <div id="secao-endereco">
-                <div class="input-group"><label>ENDEREÇO</label><input type="text" id="c-end" placeholder="Rua, número e bairro"></div>
-                <div class="input-group"><label>PONTO DE REFERÊNCIA</label><input type="text" id="c-ref" placeholder="Perto de onde?"></div>
-            </div>
+            <div id="campos-cliente" style="display:none;">
+                <div class="input-group"><label>NOME</label><input type="text" id="c-nome" placeholder="Digite seu nome"></div>
+                
+                <div id="secao-endereco" style="display:none;">
+                    <div class="input-group"><label>ENDEREÇO</label><input type="text" id="c-end" placeholder="Rua, número e bairro"></div>
+                    <div class="input-group"><label>PONTO DE REFERÊNCIA</label><input type="text" id="c-ref" placeholder="Ex: Próximo ao mercado"></div>
+                </div>
 
-            <div class="input-group">
-                <label>FORMA DE PAGAMENTO</label>
-                <select id="c-pag" onchange="toggleTroco()">
-                    <option value="Pix">Pix</option>
-                    <option value="Dinheiro">Dinheiro</option>
-                    <option value="Cartão">Cartão</option>
-                </select>
-            </div>
-
-            <div id="secao-troco" style="display:none;">
                 <div class="input-group">
-                    <label>PRECISA DE TROCO PARA QUANTO?</label>
-                    <input type="text" id="c-troco" placeholder="Ex: Troco para R$ 50,00">
+                    <label>PAGAMENTO</label>
+                    <select id="c-pag" onchange="toggleTroco()">
+                        <option value="Pix">Pix</option>
+                        <option value="Dinheiro">Dinheiro</option>
+                        <option value="Cartão">Cartão</option>
+                    </select>
+                </div>
+
+                <div id="secao-troco" style="display:none;">
+                    <div class="input-group">
+                        <label>TROCO PARA QUANTO?</label>
+                        <input type="text" id="c-troco" placeholder="Ex: R$ 50,00">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <div style="padding: 25px; border-top: 1px solid #eee;">
+        <div style="display:flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem;">
+            <span>Produtos:</span>
+            <span id="resumo-subtotal">R$ 0,00</span>
+        </div>
+        <div id="linha-taxa" style="display:none; justify-content: space-between; margin-bottom: 15px; font-size: 0.9rem;">
+            <span>Taxa de Entrega:</span>
+            <span id="resumo-taxa">R$ 0,00</span>
+        </div>
         <div style="display:flex; justify-content: space-between; margin-bottom: 15px; font-weight: 800; font-size: 1.3rem;">
             <span>TOTAL:</span>
             <span id="modal-total" style="color:var(--green);">R$ 0,00</span>
@@ -120,7 +131,7 @@
         <span id="cart-qty-badge" style="background:var(--primary); padding: 4px 10px; border-radius:8px; font-size:14px; font-weight:800;">0</span>
         <span style="margin-left:12px; font-weight: 800;">R$ <span id="display-total">0,00</span></span>
     </div>
-    <div style="background: var(--primary); padding: 10px 18px; border-radius: 12px; font-weight: 800; font-size: 12px;">CARRINHO</div>
+    <div style="background: var(--primary); padding: 10px 18px; border-radius: 12px; font-weight: 800; font-size: 12px;">VER PEDIDO</div>
 </div>
 
 <script>
@@ -197,12 +208,33 @@
             sub += parseFloat(i.getAttribute('data-preco')) * n;
             q += n;
         });
+        
         const metodo = document.getElementById('c-metodo').value;
-        document.getElementById('secao-endereco').style.display = metodo === "Delivery" ? 'block' : 'none';
-        const taxa = (metodo === "Delivery" && q > 0) ? 2.0 : 0;
-        const total = sub + taxa;
-        document.getElementById('display-total').innerText = total.toFixed(2).replace('.', ',');
-        document.getElementById('modal-total').innerText = "R$ " + total.toFixed(2).replace('.', ',');
+        const secaoCampos = document.getElementById('campos-cliente');
+        const secaoEnd = document.getElementById('secao-endereco');
+        const linhaTaxa = document.getElementById('linha-taxa');
+
+        if(metodo !== "") {
+            secaoCampos.style.display = 'block';
+            if(metodo === "Delivery") {
+                secaoEnd.style.display = 'block';
+                linhaTaxa.style.display = 'flex';
+                var taxa = q > 0 ? 2.0 : 0;
+            } else {
+                secaoEnd.style.display = 'none';
+                linhaTaxa.style.display = 'none';
+                var taxa = 0;
+            }
+        } else {
+            secaoCampos.style.display = 'none';
+            linhaTaxa.style.display = 'none';
+            var taxa = 0;
+        }
+        
+        document.getElementById('resumo-subtotal').innerText = `R$ ${sub.toFixed(2).replace('.', ',')}`;
+        document.getElementById('resumo-taxa').innerText = `R$ ${taxa.toFixed(2).replace('.', ',')}`;
+        document.getElementById('display-total').innerText = (sub + taxa).toFixed(2).replace('.', ',');
+        document.getElementById('modal-total').innerText = "R$ " + (sub + taxa).toFixed(2).replace('.', ',');
         document.getElementById('cart-qty-badge').innerText = q;
         document.getElementById('footer-cart').classList.toggle('visible', q > 0);
     }
@@ -220,36 +252,42 @@
     }
 
     function enviarPedido() {
-        const nome = document.getElementById('c-nome').value;
         const metodo = document.getElementById('c-metodo').value;
-        const pag = document.getElementById('c-pag').value;
-        const troco = document.getElementById('c-troco').value;
+        const nome = document.getElementById('c-nome').value;
 
+        if(!metodo) return alert("Por favor, selecione se deseja Entrega ou Retirada!");
         if(!nome) return alert("Por favor, digite seu nome!");
 
-        let msg = `*NOVO PEDIDO - TÁ NA MÃO*%0A%0A*Cliente:* ${nome}%0A*Entrega:* ${metodo}%0A`;
+        let msg = `*NOVO PEDIDO - TÁ NA MÃO*%0A%0A*Cliente:* ${nome}%0A*Opção:* ${metodo}%0A`;
         if(metodo === "Delivery") msg += `*Endereço:* ${document.getElementById('c-end').value}%0A*Ref:* ${document.getElementById('c-ref').value}%0A`;
         
-        msg += `*Pagamento:* ${pag}%0A`;
-        if(pag === "Dinheiro" && troco) msg += `*Troco:* ${troco}%0A`;
+        msg += `*Pagamento:* ${document.getElementById('c-pag').value}%0A`;
+        if(document.getElementById('c-pag').value === "Dinheiro" && document.getElementById('c-troco').value) msg += `*Troco para:* ${document.getElementById('c-troco').value}%0A`;
         
         msg += `%0A*--- ITENS ---*%0A`;
 
-        let sub = 0;
+        let subtotalProdutos = 0;
         document.querySelectorAll('.item').forEach(i => {
             const q = parseInt(i.querySelector('.qty').innerText);
             if(q > 0) {
-                msg += `▪️ ${q}x ${i.getAttribute('data-nome')}%0A`;
-                sub += parseFloat(i.getAttribute('data-preco')) * q;
+                const precoUnit = parseFloat(i.getAttribute('data-preco'));
+                const subItem = precoUnit * q;
+                subtotalProdutos += subItem;
+                msg += `▪️ ${q}x ${i.getAttribute('data-nome')}%0A   (Un. R$ ${precoUnit.toFixed(2).replace('.', ',')}) = *R$ ${subItem.toFixed(2).replace('.', ',')}*%0A`;
             }
         });
+
         const taxa = metodo === "Delivery" ? 2.0 : 0;
-        msg += `%0A*TOTAL: R$ ${(sub + taxa).toFixed(2).replace('.', ',')}*`;
+        msg += `%0A---------------------------%0A`;
+        msg += `*Subtotal:* R$ ${subtotalProdutos.toFixed(2).replace('.', ',')}%0A`;
+        msg += `*Taxa de Entrega:* R$ ${taxa.toFixed(2).replace('.', ',')}%0A`;
+        msg += `*TOTAL FINAL: R$ ${(subtotalProdutos + taxa).toFixed(2).replace('.', ',')}*`;
+
         window.open(`https://wa.me/${WHATSAPP_NUM}?text=${msg}`);
     }
 
     function abrirAdmin() {
-        if(prompt("Senha:") === "Vibe26") alert("Painel Gestor ativo!");
+        if(prompt("Senha:") === "Vibe26") alert("ADM liberado.");
     }
 
     window.onload = render;
