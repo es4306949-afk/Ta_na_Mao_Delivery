@@ -3,131 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TÁ NA MÃO DELIVERY</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>TÁ NA MÃO | Cardápio Completo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #ff9f43; --green: #25d366; --dark: #2d3436; --admin: #54a0ff; --bg: #f8f9fa; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-bottom: 110px; color: var(--dark); }
-        header { background: var(--primary); color: white; text-align: center; padding: 25px 20px; border-radius: 0 0 25px 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .btn-gestor { background: rgba(255,255,255,0.2); border: none; color: white; padding: 5px 15px; border-radius: 20px; font-size: 10px; cursor: pointer; margin-top: 10px; }
-        .container { max-width: 500px; margin: auto; padding: 15px; }
-        #painel-adm { display: none; background: white; padding: 20px; border-radius: 20px; border: 2px dashed var(--admin); margin-bottom: 25px; }
-        .input-adm, .select-adm { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-family: inherit; }
-        .btn-salvar { background: var(--admin); color: white; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        .categoria-titulo { font-size: 1.1rem; font-weight: 700; margin: 30px 0 15px; color: var(--primary); border-left: 5px solid var(--primary); padding-left: 10px; text-transform: uppercase; }
-        .item { background: white; border-radius: 18px; padding: 12px; display: flex; align-items: center; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
-        .item-img { width: 75px; height: 75px; border-radius: 15px; object-fit: cover; margin-right: 15px; background: #eee; }
+        :root { --primary: #ff4757; --green: #2ed573; --dark: #1e272e; --admin: #3742fa; --white: #ffffff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=1965&auto=format&fit=crop');
+            background-size: cover; background-attachment: fixed; background-position: center;
+            color: var(--dark); padding-bottom: 120px;
+        }
+
+        header { background: var(--white); padding: 20px; border-bottom: 4px solid var(--primary); position: sticky; top: 0; z-index: 999; text-align: center; }
+        header h1 { font-weight: 800; font-size: 1.5rem; }
+        header h1 span { color: var(--primary); }
+        .btn-gestor { position: absolute; right: 15px; top: 22px; background: #f1f2f6; border: none; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 11px; font-weight: bold; }
+
+        .container { max-width: 550px; margin: auto; padding: 15px; }
+
+        .categoria-titulo { font-size: 1.3rem; font-weight: 800; margin: 35px 0 15px; color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
+        .categoria-titulo::after { content: ''; flex: 1; height: 3px; background: var(--primary); border-radius: 10px; }
+
+        .item { background: rgba(255, 255, 255, 0.98); border-radius: 20px; padding: 15px; display: flex; align-items: center; margin-bottom: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
         .item-info { flex: 1; }
-        .item-name { font-weight: 700; margin: 0; font-size: 0.9rem; }
-        .item-desc { font-size: 0.65rem; color: #7f8c8d; margin: 3px 0; line-height: 1.2; }
-        .item-price { color: var(--green); font-weight: 800; font-size: 0.95rem; }
-        .controls { display: flex; align-items: center; gap: 8px; background: #f1f2f6; border-radius: 10px; padding: 5px; }
-        .btn-qty { background: white; border: none; width: 28px; height: 28px; border-radius: 8px; cursor: pointer; font-weight: bold; color: var(--primary); font-size: 18px; }
-        .qty { font-weight: bold; min-width: 15px; text-align: center; }
-        #carrinho-modal { position: fixed; bottom: -100%; left: 0; width: 100%; height: 80%; background: white; z-index: 10000; border-radius: 30px 30px 0 0; transition: 0.4s; display: flex; flex-direction: column; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); }
+        .item-name { font-weight: 800; font-size: 0.95rem; color: var(--dark); text-transform: uppercase; }
+        .item-desc { font-size: 0.75rem; color: #57606f; margin-top: 4px; line-height: 1.4; }
+        .item-price { color: #27ae60; font-weight: 800; font-size: 1.1rem; margin-top: 8px; display: block; }
+        
+        .controls { display: flex; flex-direction: column; align-items: center; background: #f1f2f6; border-radius: 15px; padding: 8px; gap: 8px; margin-left: 10px; }
+        .btn-qty { background: var(--white); border: none; width: 35px; height: 35px; border-radius: 10px; cursor: pointer; color: var(--primary); font-weight: bold; font-size: 22px; }
+        .qty { font-weight: 800; }
+
+        /* CARRINHO MODAL */
+        #carrinho-modal { position: fixed; bottom: -100%; left: 0; width: 100%; height: 92%; background: #fff; z-index: 10000; border-radius: 30px 30px 0 0; transition: 0.4s; display: flex; flex-direction: column; }
         #carrinho-modal.active { bottom: 0; }
-        .cart-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 25px; box-shadow: 0 -5px 25px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; z-index: 999; border-radius: 20px 20px 0 0; cursor: pointer; }
-        .btn-finalizar { background: var(--green); color: white; border: none; padding: 14px 22px; border-radius: 15px; font-weight: bold; cursor: pointer; }
-        .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); display:none; z-index: 9999; }
-        .btn-del { color: #ff6b6b; border: none; background: none; font-size: 11px; cursor: pointer; display: none; font-weight: bold; }
+        .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); display:none; z-index: 9999; backdrop-filter: blur(5px); }
+        
+        .form-checkout { background: #f8f9fa; padding: 20px; border-radius: 20px; margin-top: 15px; }
+        .input-group { margin-bottom: 12px; }
+        .input-group label { display: block; font-size: 11px; font-weight: 800; margin-bottom: 5px; color: #666; }
+        .form-checkout input, .form-checkout select { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; }
+
+        .footer-cart { position: fixed; bottom: 20px; left: 15px; right: 15px; background: var(--dark); color: white; padding: 20px; border-radius: 25px; display: none; justify-content: space-between; align-items: center; z-index: 999; }
+        .footer-cart.visible { display: flex; }
+        .btn-finalizar { background: var(--green); color: white; border: none; padding: 20px; border-radius: 18px; font-weight: 800; width: 100%; cursor: pointer; font-size: 1.1rem; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>TÁ NA MÃO DELIVERY </h1>
-    <button class="btn-gestor" onclick="abrirAdmin()">⚙️ GESTOR</button>
+    <h1>TÁ NA <span>MÃO</span></h1>
+    <button class="btn-gestor" onclick="abrirAdmin()"><i class="fa-solid fa-gear"></i> ADM</button>
 </header>
 
 <div class="container">
-    <div id="painel-adm">
-        <h3 style="margin-top:0; color:var(--admin)">🛠️ Gestão</h3>
-        <select id="adm-categoria-select" class="select-adm"></select>
-        <input type="text" id="adm-nome" placeholder="Nome" class="input-adm">
-        <input type="text" id="adm-desc" placeholder="Ingredientes" class="input-adm">
-        <input type="number" id="adm-preco" placeholder="Preço" class="input-adm">
-        <input type="text" id="adm-foto" placeholder="Link da Foto" class="input-adm">
-        <button class="btn-salvar" onclick="cadastrarProduto()">ADICIONAR</button>
-    </div>
-
     <div id="cardapio-dinamico"></div>
 </div>
 
 <div class="overlay" id="overlay" onclick="toggleCarrinho()"></div>
+
 <div id="carrinho-modal">
-    <div class="cart-header">
-        <h2 style="margin:0; font-size: 1.2rem;">Meu Pedido</h2>
-        <button onclick="toggleCarrinho()" style="border:none; background:none; font-size: 1.5rem;">✕</button>
+    <div style="padding: 25px; border-bottom: 1px solid #eee; display:flex; justify-content: space-between;">
+        <h2 style="font-weight: 800;">🛒 Seu Pedido</h2>
+        <button onclick="toggleCarrinho()" style="border:none; background:#f1f2f6; width:40px; height:40px; border-radius:50%;">✕</button>
     </div>
-    <div id="cart-itens-lista" style="flex:1; overflow-y:auto; padding:20px;"></div>
-    <div style="padding: 20px;">
-        <button class="btn-finalizar" style="width:100%" onclick="enviarPedido()">PEDIR PELO WHATSAPP</button>
+    
+    <div style="flex:1; overflow-y:auto; padding: 20px;">
+        <div id="cart-itens-lista"></div>
+        <div class="form-checkout">
+            <div class="input-group">
+                <label>COMO DESEJA RECEBER?</label>
+                <select id="c-metodo" onchange="atualizarTotal()">
+                    <option value="Delivery">Delivery (+ R$ 2,00)</option>
+                    <option value="Retirada">Retirada no Local (Grátis)</option>
+                </select>
+            </div>
+            <div class="input-group"><label>NOME</label><input type="text" id="c-nome" placeholder="Seu nome"></div>
+            
+            <div id="secao-endereco">
+                <div class="input-group"><label>ENDEREÇO</label><input type="text" id="c-end" placeholder="Rua, número e bairro"></div>
+                <div class="input-group"><label>PONTO DE REFERÊNCIA</label><input type="text" id="c-ref" placeholder="Perto de onde?"></div>
+            </div>
+
+            <div class="input-group">
+                <label>FORMA DE PAGAMENTO</label>
+                <select id="c-pag" onchange="toggleTroco()">
+                    <option value="Pix">Pix</option>
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="Cartão">Cartão</option>
+                </select>
+            </div>
+
+            <div id="secao-troco" style="display:none;">
+                <div class="input-group">
+                    <label>PRECISA DE TROCO PARA QUANTO?</label>
+                    <input type="text" id="c-troco" placeholder="Ex: Troco para R$ 50,00">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="padding: 25px; border-top: 1px solid #eee;">
+        <div style="display:flex; justify-content: space-between; margin-bottom: 15px; font-weight: 800; font-size: 1.3rem;">
+            <span>TOTAL:</span>
+            <span id="modal-total" style="color:var(--green);">R$ 0,00</span>
+        </div>
+        <button class="btn-finalizar" onclick="enviarPedido()">FECHAR PEDIDO NO WHATSAPP</button>
     </div>
 </div>
 
-<div class="footer-cart" onclick="toggleCarrinho()">
+<div class="footer-cart" id="footer-cart" onclick="toggleCarrinho()">
     <div>
-        <small style="color:#95a5a6; font-weight:600">Total do pedido</small><br>
-        <span style="font-size: 1.3rem; font-weight: 800;">R$ <span id="display-total">0,00</span></span>
+        <span id="cart-qty-badge" style="background:var(--primary); padding: 4px 10px; border-radius:8px; font-size:14px; font-weight:800;">0</span>
+        <span style="margin-left:12px; font-weight: 800;">R$ <span id="display-total">0,00</span></span>
     </div>
-    <button class="btn-finalizar">CARRINHO</button>
+    <div style="background: var(--primary); padding: 10px 18px; border-radius: 12px; font-weight: 800; font-size: 12px;">CARRINHO</div>
 </div>
 
 <script>
-    let isGestor = false;
-    let dadosCardapio = {
-        "Hambúrgueres": [
-            { nome: "Tradicional", desc: "Carne grelhada, queijo mussarela, ovo, calabresa, alface, cebola, tomate e molho especial.", preco: 10.00, foto: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200" },
-            { nome: "X Bacon", desc: "Carne grelhada, queijo cheddar, bacon, ovo, cebolas caramelizadas e molho especial.", preco: 14.00, foto: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=200" },
-            { nome: "X Calabresa e Bacon", desc: "Carne grelhada, queijo cheddar, ovo, bacon, calabresa e cebolas caramelizadas.", preco: 15.00, foto: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=200" },
-            { nome: "Veterano", desc: "2 Carnes grelhadas, ovo, queijo mussarela, calabresa, bacon, alface, cebola e tomate.", preco: 20.00, foto: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=200" }
+    const WHATSAPP_NUM = "5598984531899";
+
+    const menuCorreto = {
+        "Hamburguers": [
+            { nome: "Tradicional", desc: "Carne grelhada, queijo mussarela, ovo, calabresa, alface, cebola, tomate e molho especial.", preco: 10.00 },
+            { nome: "X Bacon", desc: "Carne grelhada, queijo cheddar, bacon, ovo, cebolas caramelizadas e molho especial.", preco: 14.00 },
+            { nome: "X Calabresa e Bacon", desc: "Carne grelhada, queijo cheddar, ovo, bacon, calabresa e cebolas caramelizadas.", preco: 15.00 },
+            { nome: "Veterano", desc: "2 Carnes grelhadas, ovo, queijo mussarela, calabresa, bacon, alface, cebola, tomate e molho especial.", preco: 20.00 }
         ],
-        "Hambúrguer Artesanal": [
-            { nome: "Tradicional Artesanal", desc: "Carne artesanal grelhada, queijo mussarela, calabresa, ovo, alface, cebola e tomate.", preco: 13.00, foto: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=200" },
-            { nome: "X Bacon Duplo", desc: "2 Carnes artesanais grelhadas, queijo cheddar, bacon e cebolas caramelizadas.", preco: 20.00, foto: "https://images.unsplash.com/photo-1596662951482-0c4ba74a6df6?w=200" },
-            { nome: "X Calabresa/B", desc: "Carne artesanal grelhada, queijo cheddar, calabresa, bacon e cebolas caramelizadas.", preco: 17.00, foto: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=200" },
-            { nome: "Veterano Artesanal", desc: "2 Carnes artesanais grelhadas, ovo, queijo mussarela, calabresa, bacon e salada.", preco: 25.00, foto: "https://images.unsplash.com/photo-1550317144-b38c572007db?w=200" }
+        "Hamburguer Artesanal": [
+            { nome: "Tradicional Artesanal", desc: "Carne artesanal grelhada, queijo mussarela, calabresa, ovo, alface, cebola, tomate e molho especial.", preco: 13.00 },
+            { nome: "X Bacon Duplo", desc: "2 Carnes artesanais grelhadas, queijo cheddar, bacon e cebolas caramelizadas.", preco: 20.00 },
+            { nome: "X Calabresa/B", desc: "Carne artesanal grelhada, queijo cheddar, calabresa, bacon e cebolas caramelizadas.", preco: 17.00 },
+            { nome: "Veterano Artesanal", desc: "2 Carnes artesanais grelhadas, ovo, queijo mussarela, calabresa, bacon, alface, cebola, tomate e molho especial.", preco: 25.00 }
         ],
         "Sucos": [
-            { nome: "Suco de Acerola", desc: "Sudo de acerola natural.", preco: 5.00, foto: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=200" },
-            { nome: "Suco de Goiaba", desc: "Suco de goiaba natural.", preco: 5.00, foto: "https://images.unsplash.com/photo-1629019725048-70607998335f?w=200" }
+            { nome: "Suco de Acerola", desc: "Natural e gelado (400ml).", preco: 5.00 },
+            { nome: "Suco de Goiaba", desc: "Natural e gelado (400ml).", preco: 5.00 }
         ],
         "Vitaminas": [
-            { nome: "Vitamina de Acerola", desc: "Vitamina gelada.", preco: 7.00, foto: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=200" },
-            { nome: "Vitamina de Goiaba", desc: "Vitamina gelada.", preco: 7.00, foto: "https://images.unsplash.com/photo-1570197571499-166b36435e9f?w=200" }
+            { nome: "Acerola", desc: "Vitamina cremosa com leite.", preco: 7.00 },
+            { nome: "Goiaba", desc: "Vitamina cremosa com leite.", preco: 7.00 }
         ],
         "Refrigerante": [
-            { nome: "Guaraná 200ml", desc: "Lata/Garrafa pequena.", preco: 3.00, foto: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200" },
-            { nome: "Pepsi 200ml", desc: "Garrafa pequena.", preco: 3.00, foto: "https://images.unsplash.com/photo-1629203851022-37c65dfd16c2?w=200" },
-            { nome: "Pepsi 1 Litro", desc: "Garrafa de 1 litro.", preco: 8.00, foto: "https://images.unsplash.com/photo-1629203851022-37c65dfd16c2?w=200" },
-            { nome: "Guaraná 1 Litro", desc: "Garrafa de 1 litro.", preco: 8.00, foto: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200" }
+            { nome: "Guaraná 200ml", desc: "Antarctica gelada.", preco: 3.00 },
+            { nome: "Pepsi 200ml", desc: "Gelada.", preco: 3.00 },
+            { nome: "Pepsi 1 Litro", desc: "Garrafa.", preco: 8.00 },
+            { nome: "Guaraná 1 Litro", desc: "Antarctica.", preco: 8.00 }
         ]
     };
 
-    window.onload = renderizarCardapioCompleto;
-
-    function renderizarCardapioCompleto() {
+    function render() {
         const container = document.getElementById('cardapio-dinamico');
-        const select = document.getElementById('adm-categoria-select');
-        container.innerHTML = ""; select.innerHTML = "";
-        for (let cat in dadosCardapio) {
-            select.innerHTML += `<option value="${cat}">${cat}</option>`;
+        container.innerHTML = "";
+        for (let cat in menuCorreto) {
             let html = `<div class="categoria-titulo">${cat}</div>`;
-            dadosCardapio[cat].forEach(item => {
-                html += `
-                <div class="item" data-nome="${item.nome}" data-preco="${item.preco}">
-                    <img src="${item.foto}" class="item-img">
+            menuCorreto[cat].forEach((p) => {
+                html += `<div class="item" data-nome="${p.nome}" data-preco="${p.preco}">
                     <div class="item-info">
-                        <p class="item-name">${item.nome}</p>
-                        <p class="item-desc">${item.desc}</p>
-                        <span class="item-price">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
-                        <button class="btn-del" style="display:${isGestor?'block':'none'}" onclick="removerItemDB('${cat}', '${item.nome}')">❌ Excluir</button>
+                        <p class="item-name">${p.nome}</p>
+                        <p class="item-desc">${p.desc}</p>
+                        <span class="item-price">R$ ${p.preco.toFixed(2).replace('.', ',')}</span>
                     </div>
                     <div class="controls">
-                        <button class="btn-qty" onclick="alterarQtd(this, -1)">-</button>
+                        <button class="btn-qty" onclick="qty(this, 1)">+</button>
                         <span class="qty">0</span>
-                        <button class="btn-qty" onclick="alterarQtd(this, 1)">+</button>
+                        <button class="btn-qty" onclick="qty(this, -1)">-</button>
                     </div>
                 </div>`;
             });
@@ -135,61 +178,81 @@
         }
     }
 
-    function abrirAdmin() {
-        if (prompt("Senha:") === "1234") { isGestor = !isGestor; document.getElementById('painel-adm').style.display = isGestor ? 'block' : 'none'; renderizarCardapioCompleto(); }
-    }
-
-    function cadastrarProduto() {
-        const cat = document.getElementById('adm-categoria-select').value;
-        const nome = document.getElementById('adm-nome').value;
-        const desc = document.getElementById('adm-desc').value;
-        const preco = parseFloat(document.getElementById('adm-preco').value);
-        const foto = document.getElementById('adm-foto').value || "https://cdn-icons-png.flaticon.com/512/3075/3075977.png";
-        if(nome && preco) { dadosCardapio[cat].push({ nome, desc, preco, foto }); renderizarCardapioCompleto(); }
-    }
-
-    function removerItemDB(cat, nome) { if(confirm("Excluir?")) { dadosCardapio[cat] = dadosCardapio[cat].filter(i => i.nome !== nome); renderizarCardapioCompleto(); atualizarTotal(); } }
-
-    function alterarQtd(b, v) {
-        if(isGestor) return;
-        const s = b.parentElement.querySelector('.qty');
-        let q = parseInt(s.innerText) + v;
-        if (q < 0) q = 0; s.innerText = q;
+    function qty(btn, d) {
+        const s = btn.parentElement.querySelector('.qty');
+        let v = parseInt(s.innerText) + d;
+        if(v < 0) v = 0; s.innerText = v;
         atualizarTotal();
     }
 
+    function toggleTroco() {
+        const pag = document.getElementById('c-pag').value;
+        document.getElementById('secao-troco').style.display = pag === "Dinheiro" ? 'block' : 'none';
+    }
+
     function atualizarTotal() {
-        let t = 0;
-        document.querySelectorAll('.item').forEach(i => t += parseFloat(i.getAttribute('data-preco')) * parseInt(i.querySelector('.qty').innerText));
-        document.getElementById('display-total').innerText = t.toFixed(2).replace('.', ',');
+        let sub = 0, q = 0;
+        document.querySelectorAll('.item').forEach(i => {
+            const n = parseInt(i.querySelector('.qty').innerText);
+            sub += parseFloat(i.getAttribute('data-preco')) * n;
+            q += n;
+        });
+        const metodo = document.getElementById('c-metodo').value;
+        document.getElementById('secao-endereco').style.display = metodo === "Delivery" ? 'block' : 'none';
+        const taxa = (metodo === "Delivery" && q > 0) ? 2.0 : 0;
+        const total = sub + taxa;
+        document.getElementById('display-total').innerText = total.toFixed(2).replace('.', ',');
+        document.getElementById('modal-total').innerText = "R$ " + total.toFixed(2).replace('.', ',');
+        document.getElementById('cart-qty-badge').innerText = q;
+        document.getElementById('footer-cart').classList.toggle('visible', q > 0);
     }
 
     function toggleCarrinho() {
         const m = document.getElementById('carrinho-modal');
         const l = document.getElementById('cart-itens-lista');
-        l.innerHTML = ""; let tem = false;
+        l.innerHTML = "";
         document.querySelectorAll('.item').forEach(i => {
             const q = parseInt(i.querySelector('.qty').innerText);
-            if(q > 0) {
-                tem = true;
-                l.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>${q}x ${i.getAttribute('data-nome')}</span><b>R$ ${(parseFloat(i.getAttribute('data-preco'))*q).toFixed(2).replace('.',',')}</b></div>`;
-            }
+            if(q > 0) l.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span><b>${q}x</b> ${i.getAttribute('data-nome')}</span><b>R$ ${(parseFloat(i.getAttribute('data-preco'))*q).toFixed(2).replace('.',',')}</b></div>`;
         });
-        if(!tem && !m.classList.contains('active')) return alert("Carrinho vazio!");
         m.classList.toggle('active');
         document.getElementById('overlay').style.display = m.classList.contains('active') ? 'block' : 'none';
     }
 
     function enviarPedido() {
-        let t = 0, msg = "*NOVO PEDIDO - TÁ NA MÃO* 🤝%0A%0A";
+        const nome = document.getElementById('c-nome').value;
+        const metodo = document.getElementById('c-metodo').value;
+        const pag = document.getElementById('c-pag').value;
+        const troco = document.getElementById('c-troco').value;
+
+        if(!nome) return alert("Por favor, digite seu nome!");
+
+        let msg = `*NOVO PEDIDO - TÁ NA MÃO*%0A%0A*Cliente:* ${nome}%0A*Entrega:* ${metodo}%0A`;
+        if(metodo === "Delivery") msg += `*Endereço:* ${document.getElementById('c-end').value}%0A*Ref:* ${document.getElementById('c-ref').value}%0A`;
+        
+        msg += `*Pagamento:* ${pag}%0A`;
+        if(pag === "Dinheiro" && troco) msg += `*Troco:* ${troco}%0A`;
+        
+        msg += `%0A*--- ITENS ---*%0A`;
+
+        let sub = 0;
         document.querySelectorAll('.item').forEach(i => {
             const q = parseInt(i.querySelector('.qty').innerText);
-            if (q > 0) { msg += `▪️ *${q}x* ${i.getAttribute('data-nome')}%0A`; t += parseFloat(i.getAttribute('data-preco')) * q; }
+            if(q > 0) {
+                msg += `▪️ ${q}x ${i.getAttribute('data-nome')}%0A`;
+                sub += parseFloat(i.getAttribute('data-preco')) * q;
+            }
         });
-        msg += `%0A*TOTAL: R$ ${t.toFixed(2).replace('.', ',')}*`;
-        window.open(`https://wa.me/5598984531899?text=${msg}`);
+        const taxa = metodo === "Delivery" ? 2.0 : 0;
+        msg += `%0A*TOTAL: R$ ${(sub + taxa).toFixed(2).replace('.', ',')}*`;
+        window.open(`https://wa.me/${WHATSAPP_NUM}?text=${msg}`);
     }
+
+    function abrirAdmin() {
+        if(prompt("Senha:") === "Vibe26") alert("Painel Gestor ativo!");
+    }
+
+    window.onload = render;
 </script>
 </body>
 </html>
-
