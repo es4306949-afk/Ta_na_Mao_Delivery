@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TÁ NA MÃO DELIVERY - PRO</title>
+    <title>TÁ NA MÃO DELIVERY</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #ff9f43; --green: #25d366; --dark: #2d3436; --admin: #54a0ff; --bg: #f8f9fa; }
@@ -37,29 +37,21 @@
 
 <header>
     <h1>TÁ NA MÃO DELIVERY 🤝</h1>
-    <button class="btn-gestor" onclick="abrirAdmin()">⚙️ CONFIGURAÇÕES DO GESTOR</button>
+    <button class="btn-gestor" onclick="abrirAdmin()">⚙️ GESTOR</button>
 </header>
 
 <div class="container">
-    
     <div id="painel-adm">
-        <h3 style="margin-top:0; color:var(--admin)">🛠️ Gestão do Cardápio</h3>
-        <p style="margin:0; font-size:11px; font-weight:bold">CRIAR CATEGORIA:</p>
-        <div style="display:flex; gap:5px; margin-bottom:15px;">
-            <input type="text" id="nova-cat-nome" placeholder="Ex: Sobremesas" class="input-adm" style="margin:0">
-            <button class="btn-salvar" onclick="adicionarCategoria()" style="width:100px; margin:0">Criar</button>
-        </div>
-        <p style="margin:0; font-size:11px; font-weight:bold">ADICIONAR PRODUTO:</p>
+        <h3 style="margin-top:0; color:var(--admin)">🛠️ Gestão</h3>
         <select id="adm-categoria-select" class="select-adm"></select>
-        <input type="text" id="adm-nome" placeholder="Nome do Item" class="input-adm">
-        <input type="text" id="adm-desc" placeholder="Descrição" class="input-adm">
+        <input type="text" id="adm-nome" placeholder="Nome" class="input-adm">
+        <input type="text" id="adm-desc" placeholder="Ingredientes" class="input-adm">
         <input type="number" id="adm-preco" placeholder="Preço" class="input-adm">
         <input type="text" id="adm-foto" placeholder="Link da Foto" class="input-adm">
-        <button class="btn-salvar" onclick="cadastrarProduto()">CADASTRAR</button>
+        <button class="btn-salvar" onclick="cadastrarProduto()">ADICIONAR</button>
     </div>
 
-    <div id="cardapio-dinamico">
-        </div>
+    <div id="cardapio-dinamico"></div>
 </div>
 
 <div class="overlay" id="overlay" onclick="toggleCarrinho()"></div>
@@ -70,7 +62,7 @@
     </div>
     <div id="cart-itens-lista" style="flex:1; overflow-y:auto; padding:20px;"></div>
     <div style="padding: 20px;">
-        <button class="btn-finalizar" style="width:100%" onclick="enviarPedido()">FECHAR PEDIDO NO WHATSAPP</button>
+        <button class="btn-finalizar" style="width:100%" onclick="enviarPedido()">PEDIR PELO WHATSAPP</button>
     </div>
 </div>
 
@@ -84,23 +76,32 @@
 
 <script>
     let isGestor = false;
-    
-    // BANCO DE DADOS INICIAL
     let dadosCardapio = {
         "Hambúrgueres": [
-            { nome: "X-Burger Clássico", desc: "Pão brioche, carne 150g e queijo cheddar.", preco: 25.00, foto: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200" },
-            { nome: "X-Bacon Tá na Mão", desc: "Blend da casa com muito bacon crocante.", preco: 32.00, foto: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=200" },
-            { nome: "Monstruoso Duplo", desc: "2 carnes de 150g, ovo, bacon e salada.", preco: 42.00, foto: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=200" }
+            { nome: "Tradicional", desc: "Carne grelhada, queijo mussarela, ovo, calabresa, alface, cebola, tomate e molho especial.", preco: 10.00, foto: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200" },
+            { nome: "X Bacon", desc: "Carne grelhada, queijo cheddar, bacon, ovo, cebolas caramelizadas e molho especial.", preco: 14.00, foto: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=200" },
+            { nome: "X Calabresa e Bacon", desc: "Carne grelhada, queijo cheddar, ovo, bacon, calabresa e cebolas caramelizadas.", preco: 15.00, foto: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=200" },
+            { nome: "Veterano", desc: "2 Carnes grelhadas, ovo, queijo mussarela, calabresa, bacon, alface, cebola e tomate.", preco: 20.00, foto: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=200" }
         ],
-        "Petiscos": [
-            { nome: "Batata Frita G", desc: "Porção de 500g crocante com sal e páprica.", preco: 22.00, foto: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=200" },
-            { nome: "Calabresa Acebolada", desc: "Porção acompanhada de farofa e pão.", preco: 28.00, foto: "https://images.unsplash.com/photo-1599321955419-7b5394b81561?w=200" },
-            { nome: "Nuggets Crocantes", desc: "12 unidades com molho barbecue.", preco: 18.00, foto: "https://images.unsplash.com/photo-1562967914-608f82629710?w=200" }
+        "Hambúrguer Artesanal": [
+            { nome: "Tradicional Artesanal", desc: "Carne artesanal grelhada, queijo mussarela, calabresa, ovo, alface, cebola e tomate.", preco: 13.00, foto: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=200" },
+            { nome: "X Bacon Duplo", desc: "2 Carnes artesanais grelhadas, queijo cheddar, bacon e cebolas caramelizadas.", preco: 20.00, foto: "https://images.unsplash.com/photo-1596662951482-0c4ba74a6df6?w=200" },
+            { nome: "X Calabresa/B", desc: "Carne artesanal grelhada, queijo cheddar, calabresa, bacon e cebolas caramelizadas.", preco: 17.00, foto: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=200" },
+            { nome: "Veterano Artesanal", desc: "2 Carnes artesanais grelhadas, ovo, queijo mussarela, calabresa, bacon e salada.", preco: 25.00, foto: "https://images.unsplash.com/photo-1550317144-b38c572007db?w=200" }
         ],
-        "Bebidas": [
-            { nome: "Coca-Cola 350ml", desc: "Lata geladíssima.", preco: 6.00, foto: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200" },
-            { nome: "Suco Natural Laranja", desc: "Copo de 400ml feito na hora.", preco: 9.00, foto: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=200" },
-            { nome: "Cerveja Heineken", desc: "Long Neck 330ml.", preco: 12.00, foto: "https://images.unsplash.com/photo-1618885472179-5e474019f2a9?w=200" }
+        "Sucos": [
+            { nome: "Suco de Acerola", desc: "Sudo de acerola natural.", preco: 5.00, foto: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=200" },
+            { nome: "Suco de Goiaba", desc: "Suco de goiaba natural.", preco: 5.00, foto: "https://images.unsplash.com/photo-1629019725048-70607998335f?w=200" }
+        ],
+        "Vitaminas": [
+            { nome: "Vitamina de Acerola", desc: "Vitamina gelada.", preco: 7.00, foto: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=200" },
+            { nome: "Vitamina de Goiaba", desc: "Vitamina gelada.", preco: 7.00, foto: "https://images.unsplash.com/photo-1570197571499-166b36435e9f?w=200" }
+        ],
+        "Refrigerante": [
+            { nome: "Guaraná 200ml", desc: "Lata/Garrafa pequena.", preco: 3.00, foto: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200" },
+            { nome: "Pepsi 200ml", desc: "Garrafa pequena.", preco: 3.00, foto: "https://images.unsplash.com/photo-1629203851022-37c65dfd16c2?w=200" },
+            { nome: "Pepsi 1 Litro", desc: "Garrafa de 1 litro.", preco: 8.00, foto: "https://images.unsplash.com/photo-1629203851022-37c65dfd16c2?w=200" },
+            { nome: "Guaraná 1 Litro", desc: "Garrafa de 1 litro.", preco: 8.00, foto: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200" }
         ]
     };
 
@@ -109,26 +110,19 @@
     function renderizarCardapioCompleto() {
         const container = document.getElementById('cardapio-dinamico');
         const select = document.getElementById('adm-categoria-select');
-        container.innerHTML = "";
-        select.innerHTML = "";
-
-        for (let categoria in dadosCardapio) {
-            // Adiciona no select do ADM
-            select.innerHTML += `<option value="${categoria}">${categoria}</option>`;
-            
-            // Cria Seção de Título
-            let secaoHTML = `<div class="categoria-titulo">${categoria}</div>`;
-            
-            // Cria os Itens
-            dadosCardapio[categoria].forEach(item => {
-                secaoHTML += `
+        container.innerHTML = ""; select.innerHTML = "";
+        for (let cat in dadosCardapio) {
+            select.innerHTML += `<option value="${cat}">${cat}</option>`;
+            let html = `<div class="categoria-titulo">${cat}</div>`;
+            dadosCardapio[cat].forEach(item => {
+                html += `
                 <div class="item" data-nome="${item.nome}" data-preco="${item.preco}">
                     <img src="${item.foto}" class="item-img">
                     <div class="item-info">
                         <p class="item-name">${item.nome}</p>
                         <p class="item-desc">${item.desc}</p>
                         <span class="item-price">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
-                        <button class="btn-del" style="display:${isGestor?'block':'none'}" onclick="removerItemDB('${categoria}', '${item.nome}')">❌ Excluir</button>
+                        <button class="btn-del" style="display:${isGestor?'block':'none'}" onclick="removerItemDB('${cat}', '${item.nome}')">❌ Excluir</button>
                     </div>
                     <div class="controls">
                         <button class="btn-qty" onclick="alterarQtd(this, -1)">-</button>
@@ -137,25 +131,12 @@
                     </div>
                 </div>`;
             });
-            container.insertAdjacentHTML('beforeend', secaoHTML);
+            container.insertAdjacentHTML('beforeend', html);
         }
     }
 
     function abrirAdmin() {
-        if (prompt("Senha do Gestor:") === "1234") {
-            isGestor = !isGestor;
-            document.getElementById('painel-adm').style.display = isGestor ? 'block' : 'none';
-            renderizarCardapioCompleto();
-        }
-    }
-
-    function adicionarCategoria() {
-        const nome = document.getElementById('nova-cat-nome').value.trim();
-        if(nome && !dadosCardapio[nome]) {
-            dadosCardapio[nome] = [];
-            renderizarCardapioCompleto();
-            document.getElementById('nova-cat-nome').value = "";
-        }
+        if (prompt("Senha:") === "1234") { isGestor = !isGestor; document.getElementById('painel-adm').style.display = isGestor ? 'block' : 'none'; renderizarCardapioCompleto(); }
     }
 
     function cadastrarProduto() {
@@ -164,80 +145,50 @@
         const desc = document.getElementById('adm-desc').value;
         const preco = parseFloat(document.getElementById('adm-preco').value);
         const foto = document.getElementById('adm-foto').value || "https://cdn-icons-png.flaticon.com/512/3075/3075977.png";
-
-        if(nome && preco) {
-            dadosCardapio[cat].push({ nome, desc, preco, foto });
-            renderizarCardapioCompleto();
-            document.getElementById('adm-nome').value = ""; document.getElementById('adm-preco').value = "";
-        }
+        if(nome && preco) { dadosCardapio[cat].push({ nome, desc, preco, foto }); renderizarCardapioCompleto(); }
     }
 
-    function removerItemDB(cat, nomeItem) {
-        if(confirm("Excluir item?")) {
-            dadosCardapio[cat] = dadosCardapio[cat].filter(i => i.nome !== nomeItem);
-            renderizarCardapioCompleto();
-            atualizarTotalNoRodape();
-        }
-    }
+    function removerItemDB(cat, nome) { if(confirm("Excluir?")) { dadosCardapio[cat] = dadosCardapio[cat].filter(i => i.nome !== nome); renderizarCardapioCompleto(); atualizarTotal(); } }
 
-    function alterarQtd(botao, valor) {
+    function alterarQtd(b, v) {
         if(isGestor) return;
-        const spanQty = botao.parentElement.querySelector('.qty');
-        let qtd = parseInt(spanQty.innerText) + valor;
-        if (qtd < 0) qtd = 0;
-        spanQty.innerText = qtd;
-        atualizarTotalNoRodape();
+        const s = b.parentElement.querySelector('.qty');
+        let q = parseInt(s.innerText) + v;
+        if (q < 0) q = 0; s.innerText = q;
+        atualizarTotal();
     }
 
-    function atualizarTotalNoRodape() {
-        let total = 0;
-        document.querySelectorAll('.item').forEach(item => {
-            const preco = parseFloat(item.getAttribute('data-preco'));
-            const qtd = parseInt(item.querySelector('.qty').innerText);
-            total += preco * qtd;
-        });
-        document.getElementById('display-total').innerText = total.toFixed(2).replace('.', ',');
+    function atualizarTotal() {
+        let t = 0;
+        document.querySelectorAll('.item').forEach(i => t += parseFloat(i.getAttribute('data-preco')) * parseInt(i.querySelector('.qty').innerText));
+        document.getElementById('display-total').innerText = t.toFixed(2).replace('.', ',');
     }
 
     function toggleCarrinho() {
-        const modal = document.getElementById('carrinho-modal');
-        const overlay = document.getElementById('overlay');
-        const lista = document.getElementById('cart-itens-lista');
-        lista.innerHTML = "";
-        let temItem = false;
-
-        document.querySelectorAll('.item').forEach(item => {
-            const qtd = parseInt(item.querySelector('.qty').innerText);
-            if(qtd > 0) {
-                temItem = true;
-                const nome = item.getAttribute('data-nome');
-                const preco = parseFloat(item.getAttribute('data-preco')) * qtd;
-                lista.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px dashed #eee; padding-bottom:5px;">
-                    <span>${qtd}x ${nome}</span>
-                    <b>R$ ${preco.toFixed(2).replace('.', ',')}</b>
-                </div>`;
+        const m = document.getElementById('carrinho-modal');
+        const l = document.getElementById('cart-itens-lista');
+        l.innerHTML = ""; let tem = false;
+        document.querySelectorAll('.item').forEach(i => {
+            const q = parseInt(i.querySelector('.qty').innerText);
+            if(q > 0) {
+                tem = true;
+                l.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>${q}x ${i.getAttribute('data-nome')}</span><b>R$ ${(parseFloat(i.getAttribute('data-preco'))*q).toFixed(2).replace('.',',')}</b></div>`;
             }
         });
-
-        if(!temItem && !modal.classList.contains('active')) return alert("Seu carrinho está vazio!");
-        modal.classList.toggle('active');
-        overlay.style.display = modal.classList.contains('active') ? 'block' : 'none';
+        if(!tem && !m.classList.contains('active')) return alert("Carrinho vazio!");
+        m.classList.toggle('active');
+        document.getElementById('overlay').style.display = m.classList.contains('active') ? 'block' : 'none';
     }
 
     function enviarPedido() {
-        let total = 0;
-        let msg = "*PEDIDO - TÁ NA MÃO DELIVERY* 🤝%0A%0A";
-        document.querySelectorAll('.item').forEach(item => {
-            const qtd = parseInt(item.querySelector('.qty').innerText);
-            if (qtd > 0) {
-                msg += `▪️ *${qtd}x* ${item.getAttribute('data-nome')}%0A`;
-                total += parseFloat(item.getAttribute('data-preco')) * qtd;
-            }
+        let t = 0, msg = "*NOVO PEDIDO - TÁ NA MÃO* 🤝%0A%0A";
+        document.querySelectorAll('.item').forEach(i => {
+            const q = parseInt(i.querySelector('.qty').innerText);
+            if (q > 0) { msg += `▪️ *${q}x* ${i.getAttribute('data-nome')}%0A`; t += parseFloat(i.getAttribute('data-preco')) * q; }
         });
-        msg += `%0A*TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*`;
+        msg += `%0A*TOTAL: R$ ${t.toFixed(2).replace('.', ',')}*`;
         window.open(`https://wa.me/5598984531899?text=${msg}`);
     }
 </script>
-
 </body>
 </html>
