@@ -22,7 +22,6 @@
             color: var(--dark);
         }
 
-        /* CABEÇALHO */
         header { 
             background: var(--primary); 
             color: white; 
@@ -32,8 +31,6 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        header h1 { margin: 0; font-size: 1.6rem; letter-spacing: 1px; }
-        
         .btn-gestor { 
             background: rgba(255,255,255,0.2); 
             border: 1px solid rgba(255,255,255,0.4); 
@@ -57,10 +54,7 @@
             border-radius: 20px; 
             border: 2px dashed var(--admin); 
             margin-bottom: 25px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-
-        #painel-adm h3 { margin-top: 0; color: var(--admin); font-size: 1rem; }
 
         .input-adm { 
             width: 100%; 
@@ -69,7 +63,6 @@
             border: 1px solid #ddd; 
             border-radius: 10px; 
             box-sizing: border-box;
-            font-family: inherit;
         }
 
         .btn-salvar { 
@@ -81,7 +74,6 @@
             border-radius: 10px; 
             font-weight: bold; 
             cursor: pointer;
-            font-size: 0.9rem;
         }
 
         /* CARD DO PRODUTO */
@@ -93,10 +85,7 @@
             align-items: center; 
             margin-bottom: 15px; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.04);
-            transition: transform 0.2s;
         }
-
-        .item:active { transform: scale(0.98); }
 
         .item-img { 
             width: 90px; 
@@ -108,19 +97,18 @@
         }
 
         .item-info { flex: 1; }
-        .item-name { font-weight: 700; margin: 0; font-size: 1rem; color: #333; }
-        .item-desc { font-size: 0.75rem; color: #7f8c8d; margin: 5px 0; line-height: 1.3; }
-        .item-price { color: var(--green); font-weight: 800; font-size: 1rem; display: block; margin-top: 5px; }
+        .item-name { font-weight: 700; margin: 0; font-size: 1rem; }
+        .item-desc { font-size: 0.75rem; color: #7f8c8d; margin: 5px 0; }
+        .item-price { color: var(--green); font-weight: 800; font-size: 1rem; display: block; }
 
         .btn-add { 
             background: var(--primary); 
             color: white; 
             border: none; 
-            padding: 10px 15px; 
+            padding: 12px 18px; 
             border-radius: 12px; 
             font-weight: bold; 
             cursor: pointer;
-            font-size: 0.8rem;
         }
 
         .btn-del { 
@@ -131,7 +119,6 @@
             cursor: pointer; 
             display: none; 
             margin-top: 8px;
-            font-weight: 600;
         }
 
         /* RODAPÉ FIXO */
@@ -150,9 +137,7 @@
             border-radius: 20px 20px 0 0;
         }
 
-        .total-container { line-height: 1.2; }
-        .total-label { font-size: 0.75rem; color: #95a5a6; font-weight: 600; }
-        .total-val { font-size: 1.5rem; font-weight: 800; color: var(--dark); }
+        .total-val { font-size: 1.5rem; font-weight: 800; }
 
         .btn-finalizar { 
             background: var(--green); 
@@ -162,17 +147,6 @@
             border-radius: 15px; 
             font-weight: bold; 
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
-        }
-
-        .badge-count {
-            background: #ff4757;
-            color: white;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 10px;
-            margin-left: 5px;
-            vertical-align: middle;
         }
     </style>
 </head>
@@ -180,38 +154,38 @@
 
 <header>
     <h1>TÁ NA MÃO DELIVERY 🤝</h1>
-    <p style="margin: 5px 0 0; font-size: 0.8rem; opacity: 0.8;">O melhor sabor, direto na sua mão!</p>
+    <p style="margin: 5px 0 0; font-size: 0.8rem; opacity: 0.8;">O sabor que você conhece, na palma da mão.</p>
     <button class="btn-gestor" onclick="abrirAdmin()">⚙️ Modo Gestor</button>
 </header>
 
 <div class="container">
     
     <div id="painel-adm">
-        <h3>🚀 Gerenciar Cardápio</h3>
+        <h3 style="margin-top:0; color:var(--admin)">🚀 Novo Item</h3>
         <input type="text" id="adm-nome" placeholder="Nome do Lanche" class="input-adm">
-        <input type="text" id="adm-desc" placeholder="Ingredientes (ex: Pão, carne, queijo...)" class="input-adm">
+        <input type="text" id="adm-desc" placeholder="Ingredientes" class="input-adm">
         <input type="number" id="adm-preco" placeholder="Preço (Ex: 29.90)" class="input-adm">
-        <input type="text" id="adm-foto" placeholder="Link da Foto (URL)" class="input-adm">
-        <button class="btn-salvar" onclick="cadastrarItem()">CADASTRAR PRODUTO</button>
+        <input type="text" id="adm-foto" placeholder="Link da Foto" class="input-adm">
+        <button class="btn-salvar" onclick="cadastrarItem()">CADASTRAR NO SITE</button>
     </div>
 
     <div id="lista-cardapio">
         <div class="item">
             <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300" class="item-img">
             <div class="item-info">
-                <p class="item-name">X-Burger Clássico</p>
-                <p class="item-desc">Pão brioche, blend de 150g, queijo cheddar e maionese artesanal.</p>
+                <p class="item-name">X-Burger Especial</p>
+                <p class="item-desc">Pão brioche, carne 150g e queijo.</p>
                 <span class="item-price">R$ 25,00</span>
-                <button class="btn-del" onclick="removerItem(this)">❌ Remover Item</button>
+                <button class="btn-del" onclick="removerItem(this)">❌ Remover</button>
             </div>
-            <button class="btn-add" onclick="adicionarAoCarrinho('X-Burger Clássico', 25.00)">ADD</button>
+            <button class="btn-add" onclick="adicionarCarrinho('X-Burger Especial', 25.00)">ADD</button>
         </div>
     </div>
 </div>
 
 <div class="footer-cart">
-    <div class="total-container">
-        <span class="total-label">Total do pedido</span><br>
+    <div>
+        <small style="color:#95a5a6">Total do pedido</small><br>
         <span class="total-val">R$ <span id="display-total">0,00</span></span>
     </div>
     <button class="btn-finalizar" onclick="finalizarPedido()">FECHAR PEDIDO</button>
@@ -222,98 +196,70 @@
     let pedidoItens = [];
     let isGestor = false;
 
-    // LOGIN DO ADMINISTRADOR
     function abrirAdmin() {
-        const senha = prompt("Digite a senha do gestor:");
+        const senha = prompt("Senha do administrador:");
         if (senha === "1234") {
             isGestor = !isGestor;
             document.getElementById('painel-adm').style.display = isGestor ? 'block' : 'none';
             document.querySelectorAll('.btn-del').forEach(b => b.style.display = isGestor ? 'block' : 'none');
-            alert(isGestor ? "MODO GESTOR ATIVADO" : "MODO CLIENTE ATIVADO");
         } else {
             alert("Senha incorreta!");
         }
     }
 
-    // ADICIONAR ITEM AO CARRINHO (CLIENTE)
-    function adicionarAoCarrinho(nome, preco) {
-        if (isGestor) {
-            alert("Saia do modo gestor para simular um pedido.");
-            return;
-        }
+    function adicionarCarrinho(nome, preco) {
+        if (isGestor) return;
         vTotal += preco;
         pedidoItens.push(nome);
         document.getElementById('display-total').innerText = vTotal.toFixed(2).replace('.', ',');
     }
 
-    // CADASTRAR NOVO ITEM (ADM)
     function cadastrarItem() {
         const nome = document.getElementById('adm-nome').value;
         const desc = document.getElementById('adm-desc').value;
         const preco = document.getElementById('adm-preco').value;
-        let foto = document.getElementById('adm-foto').value;
+        let foto = document.getElementById('adm-foto').value || "https://cdn-icons-png.flaticon.com/512/3075/3075977.png";
 
-        if (!nome || !preco) {
-            alert("Por favor, preencha Nome e Preço.");
-            return;
-        }
+        if (!nome || !preco) return alert("Preencha Nome e Preço!");
 
-        if (!foto) foto = "https://cdn-icons-png.flaticon.com/512/3075/3075977.png";
-
-        const precoFormatado = parseFloat(preco).toFixed(2);
-
-        const novoItemHTML = `
+        const html = `
             <div class="item">
                 <img src="${foto}" class="item-img">
                 <div class="item-info">
                     <p class="item-name">${nome}</p>
                     <p class="item-desc">${desc}</p>
-                    <span class="item-price">R$ ${precoFormatado.replace('.', ',')}</span>
-                    <button class="btn-del" style="display:block" onclick="removerItem(this)">❌ Remover Item</button>
+                    <span class="item-price">R$ ${parseFloat(preco).toFixed(2).replace('.', ',')}</span>
+                    <button class="btn-del" style="display:block" onclick="removerItem(this)">❌ Remover</button>
                 </div>
-                <button class="btn-add" onclick="adicionarAoCarrinho('${nome}', ${parseFloat(preco)})">ADD</button>
+                <button class="btn-add" onclick="adicionarCarrinho('${nome}', ${parseFloat(preco)})">ADD</button>
             </div>
         `;
-
-        document.getElementById('lista-cardapio').insertAdjacentHTML('beforeend', novoItemHTML);
+        document.getElementById('lista-cardapio').insertAdjacentHTML('beforeend', html);
         
-        // Limpa formulário
+        // Limpar campos
         document.getElementById('adm-nome').value = "";
-        document.getElementById('adm-desc').value = "";
         document.getElementById('adm-preco').value = "";
-        document.getElementById('adm-foto').value = "";
     }
 
-    // REMOVER ITEM (ADM)
-    function removerItem(botao) {
-        if (confirm("Deseja realmente excluir este produto?")) {
-            botao.closest('.item').remove();
-        }
+    function removerItem(b) {
+        if(confirm("Excluir item?")) b.closest('.item').remove();
     }
 
-    // FINALIZAR E ENVIAR WHATSAPP
     function finalizarPedido() {
-        if (pedidoItens.length === 0) {
-            alert("Seu carrinho está vazio!");
-            return;
-        }
+        if (pedidoItens.length === 0) return alert("Carrinho vazio!");
 
-        const numeroWhats = "5598985170240"; // Seu número (98) 98517-0240
+        const numeroWhats = "5598984531899"; // Atualizado conforme solicitado
         
-        // Contabiliza as quantidades (ex: 2x Lanche)
         const contagem = {};
         pedidoItens.forEach(i => contagem[i] = (contagem[i] || 0) + 1);
 
-        let mensagem = "*NOVO PEDIDO - TÁ NA MÃO DELIVERY* 🤝%0A%0A";
-        
+        let msg = "*NOVO PEDIDO - TÁ NA MÃO DELIVERY* 🤝%0A%0A";
         for (let lanche in contagem) {
-            mensagem += `▪️ *${contagem[lanche]}x* ${lanche}%0A`;
+            msg += `▪️ *${contagem[lanche]}x* ${lanche}%0A`;
         }
 
-        mensagem += `%0A*TOTAL DO PEDIDO: R$ ${vTotal.toFixed(2).replace('.', ',')}*%0A%0A`;
-        mensagem += "Gostaria de confirmar meu pedido!";
-
-        window.open(`https://wa.me/${numeroWhats}?text=${mensagem}`);
+        msg += `%0A*TOTAL: R$ ${vTotal.toFixed(2).replace('.', ',')}*`;
+        window.open(`https://wa.me/${numeroWhats}?text=${msg}`);
     }
 </script>
 
