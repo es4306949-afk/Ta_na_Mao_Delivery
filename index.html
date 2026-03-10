@@ -56,6 +56,7 @@
             display: flex; gap: 12px; 
             border: 1px solid rgba(255,255,255,0.02);
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: 0.3s;
         }
         
         .item-img { width: 85px; height: 85px; min-width: 85px; border-radius: 16px; object-fit: cover; background: #1a1a1a; }
@@ -83,6 +84,9 @@
 
         .hidden { display: none !important; }
         .btn-lock { background: none; border: none; color: #333; cursor: pointer; padding: 10px; }
+        
+        /* Estilo para item pausado no ADM */
+        .item-pausado { opacity: 0.4; border: 1px dashed #ff4757 !important; filter: grayscale(0.8); }
     </style>
 </head>
 <body>
@@ -113,39 +117,31 @@
 <div id="modal-checkout">
     <div class="checkout-card">
         <h2 style="margin-bottom: 15px; font-weight: 800;">Finalizar Pedido</h2>
-        
         <input type="text" id="cli-nome" class="form-input" placeholder="Qual seu nome?">
-        
         <select id="cli-metodo" class="form-input" onchange="updateCart()">
             <option value="" disabled selected hidden>Forma de entrega</option>
             <option value="retirada">RETIRADA</option>
             <option value="delivery">DELIVERY</option>
         </select>
-        
         <div id="sessao-endereco" class="hidden">
             <input type="text" id="cli-end" class="form-input" placeholder="Rua, Número e Bairro">
             <input type="text" id="cli-comple" class="form-input" placeholder="Ponto de Referência">
         </div>
-
         <select id="cli-pagamento" class="form-input" onchange="toggleTroco()">
             <option value="" disabled selected hidden>Forma de Pagamento</option>
             <option value="Pix">Pix</option>
             <option value="Cartão">Cartão</option>
             <option value="Dinheiro">Dinheiro</option>
         </select>
-        
         <div id="sessao-troco" class="hidden">
             <input type="number" id="cli-troco" class="form-input" placeholder="Troco para quanto?">
         </div>
-
         <textarea id="cli-obs" class="form-input" placeholder="Ex: Tirar cebola, ponto da carne, etc..." style="height: 80px; resize: none;"></textarea>
-        
         <div class="resumo-container">
             <div class="resumo-linha"><span>Subtotal:</span><span id="resumo-subtotal">R$ 0,00</span></div>
             <div class="resumo-linha" id="linha-taxa"><span>Taxa de Entrega:</span><span id="resumo-taxa">R$ 3,00</span></div>
             <div class="resumo-total"><span>TOTAL:</span><span id="resumo-total">R$ 0,00</span></div>
         </div>
-        
         <div style="display:flex; gap:10px; margin-top: 20px;">
             <button onclick="fecharCheckout()" style="flex:1; padding:15px; border-radius:15px; border:none; background:#222; color:white; font-weight:bold;">VOLTAR</button>
             <button onclick="finalizarPedido()" style="flex:2; padding:15px; border-radius:15px; border:none; background:var(--green); color:white; font-weight:bold;">ENVIAR PARA WHATSAPP</button>
@@ -175,7 +171,6 @@
     let menu = { "Hambúrgueres": [], "Artesanais": [], "Bebidas": [], "Combos": [] };
     let agenda = { 0:{abre:"18:00",fecha:"23:00"}, 1:{abre:"18:00",fecha:"23:00"}, 2:{abre:"18:00",fecha:"23:00"}, 3:{abre:"18:00",fecha:"23:00"}, 4:{abre:"18:00",fecha:"23:00"}, 5:{abre:"18:00",fecha:"23:00"}, 6:{abre:"18:00",fecha:"23:00"} };
 
-    // Sincronização em tempo real
     db.collection("sistema").doc("cardapio").onSnapshot((doc) => { if (doc.exists) { menu = doc.data(); } render(); });
     db.collection("sistema").doc("horarios").onSnapshot((doc) => { if (doc.exists) { agenda = doc.data(); } render(); });
 
@@ -199,8 +194,11 @@
             
             if (menu[cat] && menu[cat].length > 0) {
                 menu[cat].forEach((p, i) => {
+                    // SE NÃO FOR ADM E O ITEM ESTIVER PAUSADO, PULA A RENDERIZAÇÃO
+                    if (!isAdm && p.ativo === false) return;
+
                     html += `
-                    <div class="item">
+                    <div class="item ${isAdm && p.ativo === false ? 'item-pausado' : ''}">
                         <div style="position:relative">
                             <img src="${p.foto || 'https://via.placeholder.com/100'}" class="item-img">
                             ${isAdm ? `<button onclick="mudarFoto('${cat}',${i})" style="position:absolute; bottom:0; right:0; background:white; border-radius:50%; border:none; width:28px; height:28px; color:black; font-size:12px; cursor:pointer;"><i class="fa-solid fa-camera"></i></button>` : ''}
@@ -208,9 +206,13 @@
                         <div class="item-info">
                             ${isAdm ? `
                                 <input value="${p.nome}" onchange="edit('${cat}',${i},'nome',this.value)" style="background:#000; color:white; border:1px solid #333; margin-bottom:2px; font-size:12px; padding:2px; width:100%;">
-                                <textarea onchange="edit('${cat}',${i},'desc',this.value)" style="background:#000; color:white; border:1px solid #333; font-size:10px; height:30px; width:100%;">${p.desc || ''}</textarea>
+                                <div style="display:flex; gap:5px; margin-bottom:5px;">
+                                    <button onclick="toggleAtivo('${cat}',${i})" style="background:${p.ativo !== false ? '#2ecc71' : '#ff4757'}; color:white; border:none; padding:4px; border-radius:6px; font-size:9px; font-weight:800; flex:1;">
+                                        ${p.ativo !== false ? '✅ ATIVO' : '🚫 PAUSADO'}
+                                    </button>
+                                    <button onclick="remover('${cat}',${i})" style="color:#aaa; background:none; border:1px solid #333; font-size:9px; padding:4px; border-radius:6px;">APAGAR</button>
+                                </div>
                                 <input value="${p.preco}" type="number" onchange="edit('${cat}',${i},'preco',this.value)" style="background:#000; color:var(--green); border:1px solid #333; width:60px; font-size:12px;">
-                                <button onclick="remover('${cat}',${i})" style="color:red; background:none; border:none; font-size:9px; margin-top:5px; text-align:left;">APAGAR</button>
                             ` : `
                                 <span class="item-name">${p.nome}</span>
                                 <span class="item-desc">${p.desc || 'Descrição não informada.'}</span>
@@ -241,15 +243,12 @@
         let subtotal = 0;
         let qtdTotal = 0;
         const taxaEntrega = 3.00;
-        
         document.querySelectorAll('.val-qty').forEach(s => {
             subtotal += parseInt(s.innerText) * parseFloat(s.dataset.price);
             qtdTotal += parseInt(s.innerText);
         });
-
         const metodo = document.getElementById('cli-metodo').value;
         let total = subtotal;
-
         if(metodo === 'delivery' && qtdTotal > 0) {
             total += taxaEntrega;
             document.getElementById('linha-taxa').classList.remove('hidden');
@@ -260,7 +259,6 @@
             document.getElementById('resumo-taxa').innerText = "R$ 0,00";
             document.getElementById('sessao-endereco').classList.add('hidden');
         }
-
         document.getElementById('footer-total').innerText = "R$ " + total.toFixed(2).replace('.',',');
         document.getElementById('resumo-subtotal').innerText = "R$ " + subtotal.toFixed(2).replace('.',',');
         document.getElementById('resumo-total').innerText = "R$ " + total.toFixed(2).replace('.',',');
@@ -276,23 +274,17 @@
         const total = document.getElementById('resumo-total').innerText;
         const obs = document.getElementById('cli-obs').value;
         const pagamento = document.getElementById('cli-pagamento').value;
-
         if(!nome) return alert("Por favor, digite seu nome!");
         if(!metodo) return alert("Escolha o método de entrega!");
-
         let msg = `*🍔 NOVO PEDIDO - TÁ NA MÃO*\n`;
         msg += `------------------------------------------\n`;
         msg += `👤 *Cliente:* ${nome}\n`;
         msg += `📍 *Método:* ${metodo.toUpperCase()}\n`;
-
         if(metodo === 'delivery') {
             msg += `🏠 *Endereço:* ${document.getElementById('cli-end').value}\n`;
             msg += `🏢 *Ref:* ${document.getElementById('cli-comple').value}\n`;
         }
-
-        msg += `------------------------------------------\n`;
-        msg += `*ITENS DO PEDIDO:*\n`;
-
+        msg += `------------------------------------------\n*ITENS DO PEDIDO:*\n`;
         let temItens = false;
         document.querySelectorAll('.val-qty').forEach(s => {
             let q = parseInt(s.innerText);
@@ -302,31 +294,20 @@
                 msg += `✅ ${q}x ${s.dataset.name} (R$ ${precoTotalItem})\n`;
             }
         });
-
         if(!temItens) return alert("Seu carrinho está vazio!");
-
         if(obs) msg += `\n📝 *Obs:* ${obs}\n`;
-
-        msg += `------------------------------------------\n`;
-        msg += `💰 *RESUMO FINANCEIRO*\n`;
-        msg += `Subtotal: ${subtotal}\n`;
-        
+        msg += `------------------------------------------\n💰 *RESUMO FINANCEIRO*\nSubtotal: ${subtotal}\n`;
         if(metodo === 'delivery') msg += `Taxa de Entrega: ${taxa}\n`;
-        
         msg += `💳 *Pagamento:* ${pagamento}\n`;
-        
         if(pagamento === 'Dinheiro') {
             let troco = document.getElementById('cli-troco').value;
             msg += `💵 *Troco para:* R$ ${troco ? troco : 'Não necessário'}\n`;
         }
-
-        msg += `\n*TOTAL GERAL: ${total}*\n`;
-        msg += `------------------------------------------`;
-
+        msg += `\n*TOTAL GERAL: ${total}*\n------------------------------------------`;
         window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`);
     }
 
-    // ======= FUNÇÕES ADMINISTRATIVAS =======
+    // ======= FUNÇÕES ADMINISTRATIVAS (O BOTÃO SUSPENDER ESTÁ AQUI) =======
     function logarAdm() {
         if(prompt("Senha de acesso:") === "jorge2026") {
             isAdm = !isAdm;
@@ -344,14 +325,22 @@
         }
     }
 
-    function addItem(cat) { menu[cat].push({nome:"Novo Item", desc: "", preco: 0, foto: ""}); save(); }
+    // NOVA FUNÇÃO: INVERTE O STATUS DO PRODUTO (ATIVO/PAUSADO)
+    function toggleAtivo(cat, i) {
+        if (menu[cat][i].ativo === undefined) menu[cat][i].ativo = true;
+        menu[cat][i].ativo = !menu[cat][i].ativo;
+        save();
+    }
+
+    function addItem(cat) { menu[cat].push({nome:"Novo Item", desc: "", preco: 0, foto: "", ativo: true}); save(); }
     function edit(cat, i, campo, val) { menu[cat][i][campo] = campo === 'preco' ? parseFloat(val) : val; save(); }
     function remover(cat, i) { if(confirm("Deseja apagar este item?")) { menu[cat].splice(i,1); save(); } }
     function save() { db.collection("sistema").doc("cardapio").set(menu); }
+    
     function salvarHorarios() {
         let novos = {};
         for(let i=0; i<=6; i++) { novos[i] = { abre: document.getElementById(`abre-${i}`).value, fecha: document.getElementById(`fecha-${i}`).value }; }
-        db.collection("sistema").doc("horarios").set(novos).then(() => alert("✅ Horários salvos com sucesso!"));
+        db.collection("sistema").doc("horarios").set(novos).then(() => alert("✅ Horários salvos!"));
     }
 
     function mudarFoto(cat, i) {
